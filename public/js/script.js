@@ -1,4 +1,15 @@
-console.log("funcionei")
+function completarTarefa(id) {
+    fetch("http://localhost:3000/completar", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id })
+    })
+
+    window.location.reload()
+}
+
 
 function alterarTema () {
     const tema = localStorage.getItem("tema")

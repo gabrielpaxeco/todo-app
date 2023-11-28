@@ -13,12 +13,34 @@ app.use(express.urlencoded({
     extended:true
 }))
 
+app.post('/completar', (requisicao, resposta) => {
+    const id = requisicao.body.id
+
+    console.log (id)
+    const sql = `
+        UPDATE tarefas
+        SET completa = '1'
+        WHERE id = ${id} 
+    `
+           
+    
+
+    conexao.query(sql, (erro) => {
+        if (erro) {
+            return console.log(erro)
+        }
+
+        resposta.redirect('/')
+    })
+})
+
+
 app.post('/criar', (requisicao, resposta) => {
     const descricao = requisicao.body.descricao
     const completa = 0
 
     const sql = `
-        INSERT INTO tarefas(descicao, completa)
+        INSERT INTO tarefas(descricao, completa)
         VALUES ('${descricao}', '${completa}')
     `
 
@@ -36,13 +58,13 @@ app.get('/', (requisicao, resposta)=>{
 
     conexao.query(sql, (erro, dados) => {
         if (erro) {
-            return console.log(erro)
+            return console.log(erro) 
         }
 
         const tarefas = dados.map((dado)=>{
             return{
                 id: dado.id,
-                descricao: dado.descicao,
+                descricao: dado.descricao,
                 completa: dado.completa === 0 ? false : true
             }
         })
